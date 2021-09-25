@@ -8,6 +8,7 @@
 
 import DNSBlankAdvancedWorkers
 import DNSCore
+import DNSError
 import DNSProtocols
 import DNSProtocolsAdvanced
 import Foundation
@@ -17,12 +18,10 @@ open class WKRCrashNFCTagsWorker: WKRBlankNFCTagsWorker
     // MARK: - Business Logic / Single Item CRUD
     override open func doScanTags(for key: String,
                                   with progress: PTCLProgressBlock?,
-                                  and block: PTCLNFCTagsBlockVoidArrayNFCNDEFMessageDNSError?) throws {
+                                  and block: PTCLNFCTagsBlockVoidArrayNFCNDEFMessage?) throws {
         guard nextWorker != nil else {
-            throw PTCLBaseError.notImplemented(domain: "com.doublenode.\(type(of: self))",
-                                               file: DNSCore.shortenErrorPath("\(#file)"),
-                                               line: "\(#line)",
-                                               method: "\(#function)")
+            throw DNSError.Protocols
+                .notImplemented(DNSCodeLocation.crashAdvancedWorkers(self, "\(#file),\(#line),\(#function)"))
         }
         try nextWorker!.doScanTags(for: key, with: progress, and:block)
     }
